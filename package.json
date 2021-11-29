@@ -1,0 +1,24 @@
+{
+  "name": "structured-client-logging",
+  "version": "1.0.0",
+  "description": "Logging library for use in any JavaScript environment that can send logs to a remote server.",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lithictech/client-logger-js.git"
+  },
+  "keywords": [
+    "logging",
+    "structured",
+    "logs"
+  ],
+  "author": "Lithic Technology <hello@lithic.tech> (https://lithic.tech)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lithictech/client-logger-js/issues"
+  },
+  "homepage": "https://github.com/lithictech/client-logger-js#readme"
+}
