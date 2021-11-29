@@ -4,7 +4,8 @@
   "description": "Logging library for use in any JavaScript environment that can send logs to a remote server.",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "fmt": "prettier --write *.js tools/*.js"
   },
   "repository": {
     "type": "git",
@@ -20,5 +21,10 @@
   "bugs": {
     "url": "https://github.com/lithictech/client-logger-js/issues"
   },
-  "homepage": "https://github.com/lithictech/client-logger-js#readme"
+  "homepage": "https://github.com/lithictech/client-logger-js#readme",
+  "devDependencies": {
+    "libumd": "^0.9.0",
+    "prettier": "^2.5.0",
+    "terser": "^5.10.0"
+  }
 }

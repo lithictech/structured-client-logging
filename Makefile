@@ -1,8 +1,11 @@
 install:
-	npm install terser -g
+	yarn install
 
 build:
 	@rm -r umd 2> /dev/null || true
 	@mkdir umd
-	@cp index.js umd/client-logger.js
-	@terser index.js -c --ecma=5 --output=umd/client-logger.min.js
+	@cat index.js | node tools/umdify.js > umd/client-logger.js
+	@cat umd/client-logger.js | node tools/minify.js > umd/client-logger.min.js
+
+fmt:
+	yarn run fmt

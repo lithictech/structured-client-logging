@@ -114,3 +114,7 @@ Return a new logger that will include fields.
 Does not modify the initial logger.
 
 - `fields`: Fields to include in the `context` for all messages for this logger.
+
+### `flush()`
+
+Send all pending logs to the server. Use this before you navigate away from a page.
