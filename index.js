@@ -141,9 +141,9 @@ function createLogger(name, fields) {
 
 var _exports = { configure: configure, createLogger: createLogger, flush: flush };
 
-var _typechecking = false;
-
-if (_typechecking) {
+// This ends up getting overwritten by UMD but do it here so we can import our code like a normal lib.
+// noinspection JSUnresolvedVariable
+if (typeof module === "object" && module.exports) {
   // noinspection JSUnresolvedVariable
   module.exports = _exports;
 }
