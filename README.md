@@ -22,6 +22,10 @@ clientLogging.configure({endpoint: "https://api.lithic.tech/log"})
 window.structuredClientLogging.configure({endpoint: "https://api.lithic.tech/log"})
 ```
 
+Please note that the logger should always be configured if it is used;
+by default log messages are queued until configuration is done.
+If you want to disable logging, use `configure({disabled: true})`.
+
 The logger is simple structured-logging style logger that should be familiar from
 common structured logging libraries:
 
@@ -81,6 +85,9 @@ The payload that is sent to the server is:
 
 Configure logging.
 
+- `options.disabled`: Pass a truthy value to disable logging.
+  Note that logging should ALWAYS be configured; if you don't want to log, set `disabled`.
+  Otherwise, log messages will queue (up to `lineBuffer`).
 - `options.endpoint`: Logs are POSTed to this endpoint as JSON via `fetch` with `cors`.
   See `sendLogs` if you need more customization.
 - `options.requestFields`: Added to the serverside request verbatim. This could be something like:

@@ -16,6 +16,7 @@ function merge() {
 }
 
 // CONFIG STORAGE
+var disabled = null;
 var requestFields;
 var maxLineBufferSize;
 var sendLogs;
@@ -27,6 +28,7 @@ var intervalHandle = null;
 /**
  * Configure the library for application logging.
  * @param options
+ * @param {boolean} [options.disabled] True to turn off logging.
  * @param {string} [options.endpoint] Logs are POSTed to this endpoint as JSON via `fetch` with `cors`.
  *   See `sendLogs` if you need more customization.
  * @param {object} [options.requestFields] Added to the serverside request verbatim. This could be something like:
@@ -42,6 +44,16 @@ var intervalHandle = null;
  */
 function configure(options) {
   options = options || {};
+  if (options.disabled) {
+    disabled = true;
+    requestFields = null;
+    sendLogs = null;
+    pendingLines = [];
+    if (intervalHandle) {
+      window.clearInterval(intervalHandle);
+    }
+    return;
+  }
   requestFields = options.requestFields || {};
   maxLineBufferSize = options.lineBuffer || 50;
   if (options.sendLogs) {
@@ -98,6 +110,9 @@ function flush() {
 function createLogger(name, fields) {
   function makelog(level) {
     return function (event, context) {
+      if (disabled) {
+        return;
+      }
       pendingLines.push({
         logger: name,
         at: new Date().toISOString(),
