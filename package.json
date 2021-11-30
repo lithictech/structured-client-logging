@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lithictech/client-logger-js.git"
+    "url": "git+https://github.com/lithictech/structured-client-logging.git"
   },
   "keywords": [
     "logging",
@@ -19,9 +19,9 @@
   "author": "Lithic Technology <hello@lithic.tech> (https://lithic.tech)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/lithictech/client-logger-js/issues"
+    "url": "https://github.com/lithictech/structured-client-logging/issues"
   },
-  "homepage": "https://github.com/lithictech/client-logger-js#readme",
+  "homepage": "https://github.com/lithictech/structured-client-logging#readme",
   "devDependencies": {
     "libumd": "^0.9.0",
     "prettier": "^2.5.0",

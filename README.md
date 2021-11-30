@@ -1,4 +1,4 @@
-# client-logger-js
+# structured-client-logging
 
 Logging library for use in any JavaScript environment that can send logs to a remote server.
 
@@ -8,8 +8,8 @@ a `script` tag, or just copied into your repo.
 ```
 yarn add structured-client-logging
 npm install --save structured-client-logging
-<script src="https://unpkg.com/structured-client-logging/umd/client-logger.js" />
-<script src="https://unpkg.com/structured-client-logging/umd/client-logger.min.js" />
+<script src="https://unpkg.com/structured-client-logging/dist/structured-client-logging.js" />
+<script src="https://unpkg.com/structured-client-logging/dist/structured-client-logging.min.js" />
 ```
 
 To use it, configure it after it is required:
