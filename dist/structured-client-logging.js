@@ -55,8 +55,9 @@ var intervalHandle = null;
  *   if client and server environments do not have parity.
  * @param {Number} [options.lineBuffer] Maximum lines to buffer before sending to the server. Default: 50.
  * @param {Number} [options.interval] Publish logs every this many milliseconds. Defaults to 10 seconds.
- * @param {function} [options.sendLogs] Function that accepts `payload` (the server request payload described above)
- *   that will make the HTTP call to the server. Use this if you need to customize more than the HTTP endpoint,
+ * @param {logsender} [options.sendLogs] Function that accepts `payload` (the server request payload described above)
+ *   that will make the HTTP call to the server, and return a Promise.
+ *   Use this if you need to customize more than the HTTP endpoint,
  *   or you do not want to use `fetch`.
  */
 function configure(options) {
@@ -67,7 +68,7 @@ function configure(options) {
     sendLogs = null;
     pendingLines = [];
     if (intervalHandle) {
-      window.clearInterval(intervalHandle);
+      clearInterval(intervalHandle);
     }
     return;
   }
@@ -87,13 +88,14 @@ function configure(options) {
         body: JSON.stringify(payload),
       }).catch(function (r) {
         console.error("Failed to send logs:", r);
+        return Promise.reject(r);
       });
     };
   }
   if (intervalHandle !== null) {
-    window.clearInterval(intervalHandle);
+    clearInterval(intervalHandle);
   }
-  intervalHandle = window.setInterval(flush, options.interval || 10000);
+  intervalHandle = setInterval(flush, options.interval || 10000);
 }
 
 /**
@@ -101,7 +103,7 @@ function configure(options) {
  */
 function flush() {
   if (pendingLines.length === 0) {
-    return;
+    return Promise.resolve();
   }
   if (!sendLogs) {
     var overflow = pendingLines.length - maxLineBufferSize;
@@ -111,11 +113,11 @@ function flush() {
       );
       pendingLines = pendingLines.slice(overflow, overflow + maxLineBufferSize);
     }
-    return;
+    return Promise.resolve();
   }
   var payload = merge(requestFields, { lines: pendingLines });
   pendingLines = [];
-  sendLogs(payload);
+  return sendLogs(payload);
 }
 
 /**
@@ -178,6 +180,12 @@ if (typeof module === "object" && module.exports) {
  * @callback logfunc
  * @param {string} event Event name or message to log.
  * @param {object} fields Additional context for the log message.
+ */
+
+/**
+ * @callback logsender
+ * @param {object} payload Logging payload. See README#Serverside for details.
+ * @return {Promise}
  */
 
 return _exports;

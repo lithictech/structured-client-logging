@@ -4,11 +4,12 @@ Logging library for use in any JavaScript environment that can send logs to a re
 
 It is implemented as a single ES5-compatible JS file that can be installed via Yarn/NPM,
 a `script` tag, or just copied into your repo.
+The only dependencies are `Promise` (or a polyfill),
+and `fetch` (or you can provide another method to send logs remotely).
 
 ```
 yarn add structured-client-logging
 npm install --save structured-client-logging
-<script src="https://unpkg.com/structured-client-logging/dist/structured-client-logging.js" />
 <script src="https://unpkg.com/structured-client-logging/dist/structured-client-logging.min.js" />
 ```
 
@@ -55,7 +56,10 @@ let logger2 = logger.bind({y: 1})
 logger.info('hi', {z: 1}) // Has fields {x: 1, z: 1}
 logger2.info('hi') // Has fields {x: 1, y: 1}
 
-clientLogger.flush() // Flush any pending logs. May want to do this before navigating.
+// Flush any pending logs.
+clientLogger.flush()
+// flush() returns a promise so you can know after logs have been sent.
+clientLogger.flush().finally(() => (window.location.href = newHref));
 ```
 
 ## Serverside
@@ -84,6 +88,9 @@ The payload that is sent to the server is:
 ### `configure(options)`
 
 Configure logging.
+
+**Important:** `configure` must be called;
+if you do not want to log, use `configure({disabled: true}).
 
 - `options.disabled`: Pass a truthy value to disable logging.
   Note that logging should ALWAYS be configured; if you don't want to log, set `disabled`.
@@ -122,6 +129,7 @@ Does not modify the initial logger.
 
 - `fields`: Fields to include in the `context` for all messages for this logger.
 
-### `flush()`
+### `flush() -> Promise`
 
 Send all pending logs to the server. Use this before you navigate away from a page.
+The returned promise will resolve or reject depending on the result of sendLogs.
