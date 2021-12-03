@@ -104,6 +104,8 @@ if you do not want to log, use `configure({disabled: true}).
   if client and server environments do not have parity.
 - `options.lineBuffer`: Maximum lines to buffer before sending to the server. Default: 50.
 - `options.interval`: Publish logs every this many milliseconds. Defaults to 10 seconds.
+- `options.level`: One of 'debug', 'info', 'warn', 'error'. Logs with a lower level than this
+    will be skipped.
 - `options.sendLogs`: Function that accepts `payload` (the server request payload described above)
   that will make the HTTP call to the server. Use this if you need to customize more than the HTTP endpoint,
   or you do not want to use `fetch`.

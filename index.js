@@ -20,10 +20,17 @@ var disabled = null;
 var requestFields;
 var maxLineBufferSize;
 var sendLogs;
+var globalLevelNum = 0;
 
 // GLOBALS
 var pendingLines = [];
 var intervalHandle = null;
+var levelMap = {
+  debug: 10,
+  info: 20,
+  warn: 30,
+  error: 40,
+};
 
 /**
  * Configure the library for application logging.
@@ -38,6 +45,9 @@ var intervalHandle = null;
  *   if client and server environments do not have parity.
  * @param {Number} [options.lineBuffer] Maximum lines to buffer before sending to the server. Default: 50.
  * @param {Number} [options.interval] Publish logs every this many milliseconds. Defaults to 10 seconds.
+ * @param {string} [options.level] Log level. 'debug', 'info', 'warn', 'error',
+ *   just like the log methods. Log messages with a level lower than this level will be skipped.
+ *   By default, log everything. If level is invalid, console.error a warning and skip.
  * @param {logsender} [options.sendLogs] Function that accepts `payload` (the server request payload described above)
  *   that will make the HTTP call to the server, and return a Promise.
  *   Use this if you need to customize more than the HTTP endpoint,
@@ -54,6 +64,11 @@ function configure(options) {
       clearInterval(intervalHandle);
     }
     return;
+  }
+  if (levelMap[options.level]) {
+    globalLevelNum = levelMap[options.level];
+  } else {
+    console.error("invalid log level:", options.level);
   }
   requestFields = options.requestFields || {};
   maxLineBufferSize = options.lineBuffer || 50;
@@ -111,8 +126,12 @@ function flush() {
  */
 function createLogger(name, fields) {
   function makelog(level) {
+    var levelNum = levelMap[level];
     return function (event, context) {
       if (disabled) {
+        return;
+      }
+      if (levelNum < globalLevelNum) {
         return;
       }
       pendingLines.push({

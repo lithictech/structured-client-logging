@@ -1,6 +1,6 @@
 {
   "name": "structured-client-logging",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Logging library for use in any JavaScript environment that can send logs to a remote server.",
   "main": "index.js",
   "scripts": {
